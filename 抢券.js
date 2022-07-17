@@ -66,6 +66,35 @@ function 刷库存() {
             }
             toast("已转到 饿了么APP");
             func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
+            // 线程用于处理执行时间
+            threads.start(function () {
+                sleep(minger / 10 * 7.5);
+                exit();
+            });
+            while (1) {
+                func.sClick(text("提交订单").findOnce());
+                func.sClick(text("知道了").findOnce());
+                func.sClick(text("确定").findOnce());
+                sleep(23);
+            }
+        },
+        饿了么提交订单自动滑块() {
+            let time_area = "北京时间";
+            let h, m, minger;
+            let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
+            log("server_delay:" + server_delay);
+            // dat = new Date();
+            minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
+            h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
+            m = dialogs.rawInput("请输入分钟:");
+            let start_time = h + "," + m + ",00,000";
+            log("start_time:" + start_time);
+            while (text("提交订单").findOnce() == null) {
+                toast("请手动跳转到 饿了么APP");
+                sleep(2600);
+            }
+            toast("已转到 饿了么APP");
+            func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
             let huakuai, x1, y1, x2, y2, huakuai_bound;
             // 线程用于处理执行时间
             threads.start(function () {
