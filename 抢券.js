@@ -59,672 +59,681 @@ function 金融会员日() {
             break;
         }
     }
+    let target_time;
+    if (m == 60) {
+        target_time = h + ",59,59,999";
+    } else {
+        target_time = h + "," + m + ",00,000";
+    }
+    let func_type = ["到点点击进入等待", "详情页面领取"];
+    let text_arr = ["瑞幸立减29元", "188京豆", "18元还款立减", "立减10元", "腾讯视频周卡"];
 
-    func.getTimeDiff("北京时间", h + "," + m + ",00,000");
-    let cnt = 0;
-    while (1) {
-        func.sClick(text("是").findOnce());
-        func.sClick(text("立即购买").findOnce());
-        sleep(23);
-        cnt = cnt + 1;
-        if (cnt > 20) {
-            break;
+    func.getTimeDiff("北京时间", target_time);
+    if (func_type == "到点点击进入等待") {
+        let select_text = func.dialogs_select(text_arr);
+        func.sClick(text(select_text).findOnce());
+    } else {
+        let cnt = 20;
+        while (cnt--) {
+            func.sClick(text("立即购买").findOnce());
+            func.sClick(text("是").findOnce());
+            sleep(23);
         }
     }
-
-}
-function 刷库存() {
-    let stock_refresh = {
-        饿了么提交订单() {
-            let time_area = "北京时间";
-            let h, m, minger;
-            let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
-            log("server_delay:" + server_delay);
-            // dat = new Date();
-            minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
-            h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
-            m = dialogs.rawInput("请输入分钟:");
-            let start_time = h + "," + m + ",00,000";
-            log("start_time:" + start_time);
-            while (text("提交订单").findOnce() == null) {
-                toast("请手动跳转到 饿了么APP");
-                sleep(2600);
-            }
-            toast("已转到 饿了么APP");
-            func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
-            // 线程用于处理执行时间
-            threads.start(function () {
-                sleep(minger / 10 * 7.5);
-                exit();
-            });
-            while (1) {
-                func.sClick(text("提交订单").findOnce());
-                func.sClick(text("知道了").findOnce());
-                func.sClick(text("确定").findOnce());
-                sleep(23);
-            }
-        },
-        饿了么提交订单自动滑块() {
-            let time_area = "北京时间";
-            let h, m, minger;
-            let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
-            log("server_delay:" + server_delay);
-            // dat = new Date();
-            minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
-            h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
-            m = dialogs.rawInput("请输入分钟:");
-            let start_time = h + "," + m + ",00,000";
-            log("start_time:" + start_time);
-            while (text("提交订单").findOnce() == null) {
-                toast("请手动跳转到 饿了么APP");
-                sleep(2600);
-            }
-            toast("已转到 饿了么APP");
-            func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
-            let huakuai, x1, y1, x2, y2, huakuai_bound;
-            // 线程用于处理执行时间
-            threads.start(function () {
-                sleep(minger / 10 * 7.5);
-                exit();
-            });
-            while (1) {
-                func.sClick(text("提交订单").findOnce());
-                func.sClick(text("知道了").findOnce());
-                func.sClick(text("确定").findOnce());
-                huakuai = idContains("nc_1_n1z").findOnce();
-                if (huakuai != null) {
-                    huakuai_bound = huakuai.bounds();
-                    // log(huakuai_bound.left);
-                    x1 = huakuai_bound.centerX();
-                    y1 = huakuai_bound.centerY();
-                    y2 = y1;
-                    x2 = device.width - huakuai_bound.left
-                    randomSwipe(x1, y1, x2, y2);
+    function 刷库存() {
+        let stock_refresh = {
+            饿了么提交订单() {
+                let time_area = "北京时间";
+                let h, m, minger;
+                let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
+                log("server_delay:" + server_delay);
+                // dat = new Date();
+                minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
+                h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
+                m = dialogs.rawInput("请输入分钟:");
+                let start_time = h + "," + m + ",00,000";
+                log("start_time:" + start_time);
+                while (text("提交订单").findOnce() == null) {
+                    toast("请手动跳转到 饿了么APP");
+                    sleep(2600);
                 }
-                sleep(23);
-            }
-        },
-        来伊份刷库存: function () {
-            let cnt = 8;
-            let payed, click_type;
-            while (text("收银台").findOnce() == null) {
-                toastLog("开始执行，等待一下");
-                cnt = 8;
-                click_type = ""
-                func.sClick(text("立即购买").findOnce());
-                func.sClick(className("android.view.View").text("已售罄").findOnce());
-                while (cnt--) {
-                    payed = text("实付款 ：").findOnce();
-                    if (payed != null) {
-                        // log("click_pay");
-                        func.sClick(payed.parent().child(payed.parent().childCount() - 1));
-                        click_type = "click_pay";
-                    } else {
-                        // log("click_sure");
-                        func.sClick(text("确认").findOnce());
-                        func.sClick(className("android.view.View").text("已售罄").findOnce());
-                        click_type = "click_sure";
+                toast("已转到 饿了么APP");
+                func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
+                // 线程用于处理执行时间
+                threads.start(function () {
+                    sleep(minger / 10 * 7.5);
+                    exit();
+                });
+                while (1) {
+                    func.sClick(text("提交订单").findOnce());
+                    func.sClick(text("知道了").findOnce());
+                    func.sClick(text("确定").findOnce());
+                    sleep(23);
+                }
+            },
+            饿了么提交订单自动滑块() {
+                let time_area = "北京时间";
+                let h, m, minger;
+                let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
+                log("server_delay:" + server_delay);
+                // dat = new Date();
+                minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
+                h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
+                m = dialogs.rawInput("请输入分钟:");
+                let start_time = h + "," + m + ",00,000";
+                log("start_time:" + start_time);
+                while (text("提交订单").findOnce() == null) {
+                    toast("请手动跳转到 饿了么APP");
+                    sleep(2600);
+                }
+                toast("已转到 饿了么APP");
+                func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
+                let huakuai, x1, y1, x2, y2, huakuai_bound;
+                // 线程用于处理执行时间
+                threads.start(function () {
+                    sleep(minger / 10 * 7.5);
+                    exit();
+                });
+                while (1) {
+                    func.sClick(text("提交订单").findOnce());
+                    func.sClick(text("知道了").findOnce());
+                    func.sClick(text("确定").findOnce());
+                    huakuai = idContains("nc_1_n1z").findOnce();
+                    if (huakuai != null) {
+                        huakuai_bound = huakuai.bounds();
+                        // log(huakuai_bound.left);
+                        x1 = huakuai_bound.centerX();
+                        y1 = huakuai_bound.centerY();
+                        y2 = y1;
+                        x2 = device.width - huakuai_bound.left
+                        randomSwipe(x1, y1, x2, y2);
                     }
-                    toast("当前cnt：" + cnt);
+                    sleep(23);
+                }
+            },
+            来伊份刷库存: function () {
+                let cnt = 8;
+                let payed, click_type;
+                while (text("收银台").findOnce() == null) {
+                    toastLog("开始执行，等待一下");
+                    cnt = 8;
+                    click_type = ""
+                    func.sClick(text("立即购买").findOnce());
+                    func.sClick(className("android.view.View").text("已售罄").findOnce());
+                    while (cnt--) {
+                        payed = text("实付款 ：").findOnce();
+                        if (payed != null) {
+                            // log("click_pay");
+                            func.sClick(payed.parent().child(payed.parent().childCount() - 1));
+                            click_type = "click_pay";
+                        } else {
+                            // log("click_sure");
+                            func.sClick(text("确认").findOnce());
+                            func.sClick(className("android.view.View").text("已售罄").findOnce());
+                            click_type = "click_sure";
+                        }
+                        toast("当前cnt：" + cnt);
+                        sleep(2500);
+                        if (click_type == "") {
+                            cnt = 8;
+                            break;
+                        }
+                    }
+                    log("click_type:" + click_type);
+                    if (click_type == "click_pay") {
+                        toastLog("执行完一轮，返回一下");
+                        back();
+                        sleep(2000);
+                    }
+                }
+            },
+        }
+        return stock_refresh;
+    }
+    function 京东() {
+        let jd_func = {
+            到点切换领取: function (scheme_url, func_string, count, start_second, count_delay) {
+                let count_delay = count_delay || 200;
+                let time_area = time_area || "北京时间";
+                let start_time;
+                let h = new Date().getHours();           //时
+                // start_second = '58,000'
+                start_time = h + start_second || ",59,59,600";
+                log(start_time);
+                // TEST start_time = h + ",21,30,500";   // TEST
+                if (new Date().getMinutes() < 59) {
+                    func.to_scheme(scheme_url);
+                    toastLog("切换到指定页面 测试等待");
                     sleep(2500);
-                    if (click_type == "") {
-                        cnt = 8;
-                        break;
-                    }
+                    toastLog("等待几秒");
+                    sleep(7000);
                 }
-                log("click_type:" + click_type);
-                if (click_type == "click_pay") {
-                    toastLog("执行完一轮，返回一下");
-                    back();
-                    sleep(2000);
-                }
-            }
-        },
-    }
-    return stock_refresh;
-}
-function 京东() {
-    let jd_func = {
-        到点切换领取: function (scheme_url, func_string, count, start_second, count_delay) {
-            let count_delay = count_delay || 200;
-            let time_area = time_area || "北京时间";
-            let start_time;
-            let h = new Date().getHours();           //时
-            // start_second = '58,000'
-            start_time = h + start_second || ",59,59,600";
-            log(start_time);
-            // TEST start_time = h + ",21,30,500";   // TEST
-            if (new Date().getMinutes() < 59) {
+                func.to_autojs();
+                func.getTimeDiff(time_area, start_time);              // 等待到15秒的时候再进入
                 func.to_scheme(scheme_url);
-                toastLog("切换到指定页面 测试等待");
-                sleep(2500);
-                toastLog("等待几秒");
-                sleep(7000);
-            }
-            func.to_autojs();
-            func.getTimeDiff(time_area, start_time);              // 等待到15秒的时候再进入
-            func.to_scheme(scheme_url);
-            while (count--) {
-                func_string();              // 点击标签
-                sleep(count_delay);
-            }
-        },
-        整点点击: function (click_element, count, time_area, count_delay) {
-            let count_delay = count_delay || 200;
-            let time_area = time_area || "北京时间";
-            let start_time;
-            let h = new Date().getHours();           //时
-            start_time = h + ",59,59,500";
-            // TEST start_time = h + ",21,30,500";   // TEST
-            func.getTimeDiff(time_area, start_time);              // 等待到15秒的时候再进入
-            while (count--) {
-                func.sClick(click_element);              // 点击标签
-                sleep(count_delay);
-            }
-        }
-    }
-    let jd = {
-        苹果券: function () {
-            let scheme_url = 'openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://pro.m.jd.com/mall/active/3KwXX8TkUoxiYL5ZfDPzs7w7xqEV/index.html?utm_user=plusmember&gx=RnE1l2ANOjXdydTCOBKuwaU&ad_od=share&hideyl=1&cu=true&utm_source=weixin&utm_medium=weixin&utm_campaign=t_1000072672_17053_001&utm_term=500879a71fb64499ba0adf506754815d&PTAG=17053.1.1&_openapp=1"}';
-            let func_string = function () {
-                click("立即领取");
-            }
-            jd_func.到点切换领取(scheme_url, func_string, 20);
-        },
-        切换领取618惊喜券: function () {
-            let scheme_url = 'openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://prodev.m.jd.com/mall/active/21Shup6BDitJApvnfuc8AjHnzfZ4/index.html?cu=true&utm_source=www.linkstars.com&utm_medium=tuiguang&utm_campaign=t_1000089893_157_0_184__b3106242b6736605&utm_term=09fd51f0f1734fd795f36f133d00296c&_openapp=1&toappactive=1"}';
-            let func_string = function () {
-                element = textContains("大促惊喜券").findOnce();
-                if (element != null) {
-                    try {
-                        log('click');
-                        func.sClick(element.parent().child(1).child(2));
-                    } catch (e) {
-                        log(e);
-                    }
+                while (count--) {
+                    func_string();              // 点击标签
+                    sleep(count_delay);
+                }
+            },
+            整点点击: function (click_element, count, time_area, count_delay) {
+                let count_delay = count_delay || 200;
+                let time_area = time_area || "北京时间";
+                let start_time;
+                let h = new Date().getHours();           //时
+                start_time = h + ",59,59,500";
+                // TEST start_time = h + ",21,30,500";   // TEST
+                func.getTimeDiff(time_area, start_time);              // 等待到15秒的时候再进入
+                while (count--) {
+                    func.sClick(click_element);              // 点击标签
+                    sleep(count_delay);
                 }
             }
-            jd_func.到点切换领取(scheme_url, func_string, 2, ',59,58,500');
-        },
-        京东618惊喜券: function () {
-            let scheme_url = 'openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://prodev.m.jd.com/mall/active/21Shup6BDitJApvnfuc8AjHnzfZ4/index.html?cu=true&utm_source=www.linkstars.com&utm_medium=tuiguang&utm_campaign=t_1000089893_157_0_184__b3106242b6736605&utm_term=09fd51f0f1734fd795f36f133d00296c&_openapp=1&toappactive=1"}';
-            func.to_scheme(scheme_url);
-            let click_btn = null;
-            let element, count;
-            count = 0;
-            while (click_btn == null) {
-                element = textContains("大促惊喜券").findOnce();
-                if (element == null) {
-                    if (count == 0) {
-                        toastLog("等待加载");
-                    } else if (count > 9) {
-                        count = 0;
+        }
+        let jd = {
+            苹果券: function () {
+                let scheme_url = 'openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://pro.m.jd.com/mall/active/3KwXX8TkUoxiYL5ZfDPzs7w7xqEV/index.html?utm_user=plusmember&gx=RnE1l2ANOjXdydTCOBKuwaU&ad_od=share&hideyl=1&cu=true&utm_source=weixin&utm_medium=weixin&utm_campaign=t_1000072672_17053_001&utm_term=500879a71fb64499ba0adf506754815d&PTAG=17053.1.1&_openapp=1"}';
+                let func_string = function () {
+                    click("立即领取");
+                }
+                jd_func.到点切换领取(scheme_url, func_string, 20);
+            },
+            切换领取618惊喜券: function () {
+                let scheme_url = 'openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://prodev.m.jd.com/mall/active/21Shup6BDitJApvnfuc8AjHnzfZ4/index.html?cu=true&utm_source=www.linkstars.com&utm_medium=tuiguang&utm_campaign=t_1000089893_157_0_184__b3106242b6736605&utm_term=09fd51f0f1734fd795f36f133d00296c&_openapp=1&toappactive=1"}';
+                let func_string = function () {
+                    element = textContains("大促惊喜券").findOnce();
+                    if (element != null) {
+                        try {
+                            log('click');
+                            func.sClick(element.parent().child(1).child(2));
+                        } catch (e) {
+                            log(e);
+                        }
+                    }
+                }
+                jd_func.到点切换领取(scheme_url, func_string, 2, ',59,58,500');
+            },
+            京东618惊喜券: function () {
+                let scheme_url = 'openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://prodev.m.jd.com/mall/active/21Shup6BDitJApvnfuc8AjHnzfZ4/index.html?cu=true&utm_source=www.linkstars.com&utm_medium=tuiguang&utm_campaign=t_1000089893_157_0_184__b3106242b6736605&utm_term=09fd51f0f1734fd795f36f133d00296c&_openapp=1&toappactive=1"}';
+                func.to_scheme(scheme_url);
+                let click_btn = null;
+                let element, count;
+                count = 0;
+                while (click_btn == null) {
+                    element = textContains("大促惊喜券").findOnce();
+                    if (element == null) {
+                        if (count == 0) {
+                            toastLog("等待加载");
+                        } else if (count > 9) {
+                            count = 0;
+                        } else {
+                            sleep(300);
+                        }
                     } else {
-                        sleep(300);
+                        try {
+                            click_btn = element.parent().child(1).child(2);
+                        }
+                        catch (e) {
+                            log("报错了:" + e);
+                            continue;
+                        }
                     }
-                } else {
-                    try {
-                        click_btn = element.parent().child(1).child(2);
-                    }
-                    catch (e) {
-                        log("报错了:" + e);
-                        continue;
-                    }
+                    count = coun
+                    t + 1;
                 }
-                count = coun
-                t + 1;
             }
         }
-    }
-    return jd;
+        return jd;
 
-}
+    }
 
-function BP直达() {
-    let local_config = storages.create("local_config");
-    let storage_bps = {};
-    if (local_config.contains("BP直达")) {
-        storage_bps = local_config.get("BP直达");
-    }
-    let select_item = func.dialogs_select(["---增加新BP链接", "---云端获取BP"].concat(Object.keys(storage_bps)));
+    function BP直达() {
+        let local_config = storages.create("local_config");
+        let storage_bps = {};
+        if (local_config.contains("BP直达")) {
+            storage_bps = local_config.get("BP直达");
+        }
+        let select_item = func.dialogs_select(["---增加新BP链接", "---云端获取BP"].concat(Object.keys(storage_bps)));
 
-    let bp_scheme;
-    if (select_item == "---增加新BP链接") {
-        // select_item = func.dialogs_select(["京东", "淘宝"]);
-        let input_name = rawInput("请输入BP名称");
-        bp_scheme = rawInput("请输入BP链接");
-        if (storage_bps == {}) {
-            storage_bps = { input_name: bp_scheme }
-        }
-        local_config.put("BP直达", storage_bps);
-        func.to_scheme(bp_scheme);
-        toast("已跳转BP链接");
-    } else if (select_item == "---云端获取BP") {
-        http.__okhttp__.setTimeout(3000);
-        let res = func.jianguoyun("auto.js_code/", "BP_LIST.txt");
-        let res_json = JSON.parse(res);
-        local_config.put("BP直达", res_json);
-    } else {
-        bp_scheme = storage_bps[select_item];
-        let jump_way = func.dialogs_select(["整点跳转", "直接跳转"]);
-        if (jump_way == "整点跳转") {
-            let h = new Date().getHours();
-            log(h + "59,59,999");
-            func.getTimeDiff("北京时间", h + ",59,59,999");
-        }
-        func.to_scheme(bp_scheme);
-        toast("已跳转BP链接");
-    }
-}
-function 招商倒计时领取() {
-    let appName, url;
-    appName = "招商银行"
-    url = "";
-    if (url != "") {
-        func.to_scheme(url);
-    } else {
-        func.to_app(appName);
-    }
-    let cnt = 0;
-    toastLog("等待立即领取出现");
-    while (func.sClick(textStartsWith("立即").findOne()) == false) {
-        if (cnt == 0) {
-            toastLog("等待立即领取加载...")
-        }
-        cnt = cnt + 1;
-        sleep(50);
-        if (cnt > 1000 / 50 * 3) {
-            cnt = 0;
+        let bp_scheme;
+        if (select_item == "---增加新BP链接") {
+            // select_item = func.dialogs_select(["京东", "淘宝"]);
+            let input_name = rawInput("请输入BP名称");
+            bp_scheme = rawInput("请输入BP链接");
+            if (storage_bps == {}) {
+                storage_bps = { input_name: bp_scheme }
+            }
+            local_config.put("BP直达", storage_bps);
+            func.to_scheme(bp_scheme);
+            toast("已跳转BP链接");
+        } else if (select_item == "---云端获取BP") {
+            http.__okhttp__.setTimeout(3000);
+            let res = func.jianguoyun("auto.js_code/", "BP_LIST.txt");
+            let res_json = JSON.parse(res);
+            local_config.put("BP直达", res_json);
+        } else {
+            bp_scheme = storage_bps[select_item];
+            let jump_way = func.dialogs_select(["整点跳转", "直接跳转"]);
+            if (jump_way == "整点跳转") {
+                let h = new Date().getHours();
+                log(h + "59,59,999");
+                func.getTimeDiff("北京时间", h + ",59,59,999");
+            }
+            func.to_scheme(bp_scheme);
+            toast("已跳转BP链接");
         }
     }
-    toastLog("已点击");
-}
-
-function 招商领取(page_text, wait_text, popup_wait_text, select_text, sure_btn) {
-    /**
-    @param page_text 等待目标页面 加载的文字
-    @param wait_text 等待时间到点后 加载的文字
-    @param popup_wait_text 等待点击后 弹窗加载的文字
-    @param select_text 等待目标页面 要选择的文字
-    @param sure_btn 等待选择界面后确认 的文字
-     */
-    while (text(page_text).findOnce() == null) {
-        toast("等待跳转到:" + page_text + "页面");
-        sleep(2200);
-    }
-    let cnt;
-    cnt = 0
-    while (func.sClick(text(wait_text).findOnce()) == false) {
-        if (cnt % 10 == 0) {
-            toast("等待选择奖品");
+    function 招商倒计时领取() {
+        let appName, url;
+        appName = "招商银行"
+        url = "";
+        if (url != "") {
+            func.to_scheme(url);
+        } else {
+            func.to_app(appName);
         }
-        cnt = cnt + 1;
-        sleep(300);
-
-    }
-    let popup_parent, popup_child;
-    popup_parent = text(popup_wait_text).findOne().parent();
-    popup_child = popup_parent.findByText(select_text);
-    if (popup_child.size() > 0) {
-        func.cClick(popup_child.get(0));
-    }
-    sleep(200);
-    func.sClick(text(sure_btn).findOne());
-}
-
-function 招商便民生活() {
-    let page_text, wait_text, popup_wait_text, select_text, sure_btn;
-    page_text = "便民生活 遇见美好";
-    wait_text = "选择奖品";
-    popup_wait_text = "请选择奖品";
-    select_text = func.dialogs_select(["双立人", "洁柔", "九阳", "1.8元", "5000微克", "4000微克"]);
-    sure_btn = "确认领取";
-    while (textContains("体验便民频道").findOnce() == null) {
-        toast("请跳转到 生活-便民活动领取页面");
-        sleep(2600);
-    }
-    招商领取(page_text, wait_text, popup_wait_text, select_text, sure_btn);
-}
-
-// 到点点击
-function 光大活动() {
-    toastLog("到点点击");
-    let scheme_url = {
-        "朴朴50-25周六日10点": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126291&channelName=shanquan&batchId=126291&tag=shareDetail",
-        "朴朴50-10平日10点": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126279&jsonData=&channelName=shanquan&batchId=126279&tag=shareDetail",
-        "美团30-15": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126291&jsonData=&channelName=shanquan&batchId=126291&tag=shareDetail",
-    }
-    let startTime, targetViewText;
-    let actNames = ["周五石化200-120", "周五京东200-50", "10点美团30-15", "朴朴50-25周六日10点", "朴朴50-10平日10点"];
-    let actName = func.dialogs_select(actNames);      // 设置查找的文本
-
-    switch (actName) {
-        // 10点
-        case "10点美团30-15":            //10点
-            startTime = "10,00,00,000";
-            targetViewText = "49346";
-            break;
-        case "朴朴50-25周六日10点":            //10点
-            startTime = "09,59,59,500";
-            targetViewText = "51977";
-            break;
-        case "朴朴50-10平日10点":            //10点
-            startTime = "09,59,59,500";
-            targetViewText = "51971";
-            break;
-        case "周五石化200-120":            //10点
-            // 11点 650 太早 750太慢 700太慢
-            startTime = "14,59,59,500";
-            targetViewText = "49136";
-            break;
-        case "周五京东200-50":            //11点
-            startTime = "14,59,59,500";
-            targetViewText = "48161";
-            break;
-    }
-
-    let appName = "阳光惠生活";
-    let timeArea = "北京时间";
-    if (!!scheme_url[actName]) {
-        func.to_scheme(scheme_url[actName]);
-    } else {
-        func.to_app(appName);
-    }
-    // 等待进入指定页面
-    while (!textContains(targetViewText).findOnce()) {
-        toastLog("请跳转到券领取页面，直到提示  已到达等待页面");
-        sleep(1000);
-    }
-    toastLog("已到达指定页面，等待");
-    let click_btn;
-    click_btn = text("确认购买").findOnce();
-    if (click_btn == null) {
-        click_btn = textContains("立即抢购").findOnce();
-    }
-    //   定位元素
-    func.getTimeDiff(timeArea, startTime,);
-    while (text("收银台").findOnce() == null) {
-        func.sClick(text("确认购买").findOnce());
-        func.sClick(textContains("立即抢购").findOnce());
-        func.sClick(text("确认").findOnce());
-        sleep(23);
-    }
-    toastLog("已点击，请确认结果");
-    sleep(3000);
-}
-
-// 等待页面变价
-function 中信活动() {
-    let appName = "动卡空间";
-    let pkgName = "com.citiccard.harmony.app";
-    let timeArea = "北京时间";
-    let startTime, targetViewText;
-    let actNames = ["10点-15点-9积分兑换", "周三六11点-5折必胜客百果园", "9积分捡漏"];
-    let actName = func.dialogs_select(actNames);      // 设置查找的文本
-    let couDes, couClick;    // 券描述列表
-    let nowDate = new Date();
-    let item_page_text = "价格: 1个权益+9个积分";
-
-    switch (actName) {
-        case "10点-15点-9积分兑换":
-            if (func.dialogs_select(["基础权益", "额外权益"]) == "基础权益") {
-                couDes = ["京东支付券15元", "天猫15元", "奈雪18元", "百果园18元", "腾讯视频VIP"];
+        let cnt = 0;
+        toastLog("等待立即领取出现");
+        while (func.sClick(textStartsWith("立即").findOne()) == false) {
+            if (cnt == 0) {
+                toastLog("等待立即领取加载...")
             }
-            else {
-                couDes = ["喜茶25", "京东支付券20", "天猫20元", "星巴克中杯", "迪士尼20", "麦当劳25", "美团外卖20", "优酷会员45天", "芒果TV45天"];
+            cnt = cnt + 1;
+            sleep(50);
+            if (cnt > 1000 / 50 * 3) {
+                cnt = 0;
             }
-            toastLog("等待页面变化");
-            // log(nowDate.getHours() <= 9);
-            // 如果当前小时数 大于10，则是15点场
-            if (nowDate.getHours() <= 9) {
-                startTime = "09,59,50,000"
-            } else {
-                startTime = "14,59,50,000"
-                couDes = ["【下午茶】喜茶25元抵用券（15点抢兑）"];
-            }
+        }
+        toastLog("已点击");
+    }
 
-            if (couDes.length == 1) {
-                targetViewText = couDes[0];               // 设置查找的文本
-            } else {
-                targetViewText = func.dialogs_select(couDes);               // 设置查找的文本
+    function 招商领取(page_text, wait_text, popup_wait_text, select_text, sure_btn) {
+        /**
+        @param page_text 等待目标页面 加载的文字
+        @param wait_text 等待时间到点后 加载的文字
+        @param popup_wait_text 等待点击后 弹窗加载的文字
+        @param select_text 等待目标页面 要选择的文字
+        @param sure_btn 等待选择界面后确认 的文字
+         */
+        while (text(page_text).findOnce() == null) {
+            toast("等待跳转到:" + page_text + "页面");
+            sleep(2200);
+        }
+        let cnt;
+        cnt = 0
+        while (func.sClick(text(wait_text).findOnce()) == false) {
+            if (cnt % 10 == 0) {
+                toast("等待选择奖品");
             }
-
-            func.to_app(appName);             // 启动APP
-            couClick = null;          // 找券
-            while (couClick == null) {
-                if (couDes == "星巴克中杯饮品电子券") {
-                    couClick = text(targetViewText).findOnce();          // 找券
-                } else {
-                    couClick = textContains(targetViewText).findOnce();          // 找券
-                }
-                toastLog("请跳转到券 列表 页面，直到提示  已到达等待页面");
-                sleep(1000);
-            }
-            // toastLog("已到达等待页面，提前15秒自动进入");
-            toastLog("元素文本：" + couClick.text());
-            func.getTimeDiff(timeArea, startTime);              // 等待到15秒的时候再进入
-            func.sClick(couClick);              // 点击标签
-            text(item_page_text).findOne();             // 等待进入指定页面
-            toastLog("已到达指定页面，等待");
-            //点击元素
-            let un_start, to_pay = null;
-            un_start = text("未开始").findOne();
-            let un_x, un_y;
-            un_x = un_start.bounds().centerX();
-            un_y = un_start.bounds().centerY();
-            while (to_pay == null) {
-                click(un_x, un_y);
-                sleep(100);
-                to_pay = text("去支付").findOnce();
-            }
-            func.sClick(to_pay);
-            toastLog("已点击，等待验证码");
-            sleep(3000);
-            break;
-        case "周三六11点-5折必胜客百果园":
-            toastLog("到点点击");
-            startTime = "11,00,00,000";             // 设置时间点
-            couDes = ["必胜客100元代金券", "必胜客50元代金券", "达美乐50元代金券", "肯德基50元代金券", "乐凯撒50元代金券"];             // 券名称
-            targetViewText = func.dialogs_select(couDes);               // 设置查找的文本
-            func.to_app(appName);             // 启动APP
-            // 等待进入指定页面
-            couClick = text(targetViewText).findOnce();
-            while (couClick == null) {
-                couClick = text(targetViewText).findOnce();
-                toastLog("请跳转到，首页-精彩365--5折友券,\n直到提示已到达等待页面");
-                sleep(2500);
-            }
-            toastLog("元素文本：" + couClick.text());
-            func.getTimeDiff(timeArea, startTime);
-            sleep(200);              // 等待时间
-            func.sClick(couClick);             // 点击元素
-            // 点击元素
-            while (func.sClick(text("确认").findOnce()) == false) {
-                func.sClick(className("Button").text("立即购买").findOnce());
-                func.sClick(className("Button").text("已售罄").findOnce());
-                sleep(100);
-            }
-            // func.sClick(text("确认").findOne());
-            toastLog("已点击，请确认结果");
-            sleep(3000);
-            break;
-        case "9积分捡漏":
-            couDes = ["App Store", "迪士尼25", "必胜客20", "奈雪", "喜茶25元", "苏宁支付券", "京东支付券", "天猫20",
-                "星巴克中杯饮品电子券", "名创优品20", "网易严选20", "百果园20", "美团外卖20", "优酷VIP", "腾讯视频", "芒果TV", "爱奇艺VIP"];
-            appName = "动卡空间"
-            let cnt = 0;
-            targetViewText = func.dialogs_select(couDes);               // 设置查找的文本
-            func.to_app(appName);             // 启动APP
-            while (text(item_page_text).findOnce() == null) {
-                sleep(100);
-                cnt = cnt + 1;
-                if (cnt >= 25) {
-                    cnt = 0;
-                    toastLog("请手动切换到要捡漏的商品页面");
-                }
-            }             // 等待进入指定页面
+            cnt = cnt + 1;
             sleep(300);
-            nowDate = new Date();
 
-            if (nowDate.getHours() <= 10) {
-                startTime = "10,18,20,000"
-            } else if (nowDate.getHours() >= 15) {
-                startTime = "15,18,20,000"
-            } else {
-                startTime = "00,01,01,100"
-            }
-            toastLog("18分启动.....");
-            func.getTimeDiff(timeArea, startTime);              // 等待时间
-            let exWhile = false;
-            // 门店查找方式
-            if (text("适用门店").findOnce() != null) {
-                while (1) {
-                    if (func.sClick(text("去兑换").findOnce())) {
-                        func.sClick(text("去支付").findOne());
-                        while (1) {
-                            if (text("适用门店").findOnce() != null) {
-                                exWhile = false
-                                break;
-                            }
-                            if (text("交易时间").findOnce() != null) {
-                                exWhile = true
-                                break;
-                            }
-                        }
-                        if (exWhile) { break; }
-                    }
-                    if (func.sClick(text("适用门店").findOnce())) {
-                        className("EditText").depth(14).findOne();
-                        back();
-                        sleep(400);
-                    }
-                    sleep(150);
-                }
-            } else {
-                let item = null;
-                // 无门店查找
-                while (1) {
-                    if (func.sClick(text("去兑换").findOnce())) {
-                        func.sClick(text("去支付").findOne());
-                        while (1) {
-                            if (text("适用门店").findOnce() != null) {
-                                exWhile = false
-                                break;
-                            }
-                            if (text("交易时间").findOnce() != null) {
-                                exWhile = true
-                                break;
-                            }
-                        }
-                        if (exWhile) { break; }
-                    } else {
-                        back();
-                        item = textContains(targetViewText).depth(17).findOnce();
-                        cnt = 0;
-                        while (item == null) {
-                            item = textContains(targetViewText).depth(17).findOnce();
-                            sleep(50);
-                            scrollDown(0);
-                            cnt = cnt + 1;
-                            // 滑动3次就手动滑动一次
-                            if (cnt >= 3) {
-                                swipe(500, 850, 500, 600, 100);
-                                cnt = 0;
-                            }
-                            sleep(50);
-                            func.sClick(text("点击查看更多").findOnce());
-                            sleep(50);
-                        }
-                        func.sClick(item);
-                        text(item_page_text).findOne();
-                    }
-                    sleep(150);
-                }
-            }
-    }
-}
-
-function randomSwipe(sx, sy, ex, ey) {
-    //设置随机滑动时长范围
-    var timeMin = 400
-    var timeMax = 700
-    //设置控制点极限距离
-    var leaveHeightLength = 500
-
-    if (Math.abs(ex - sx) > Math.abs(ey - sy)) {
-        var my = (sy + ey) / 2
-        var y2 = my + random(0, leaveHeightLength)
-        var y3 = my - random(0, leaveHeightLength)
-
-        var lx = (sx - ex) / 3
-        if (lx < 0) { lx = -lx }
-        var x2 = sx + lx / 2 + random(0, lx)
-        var x3 = sx + lx + lx / 2 + random(0, lx)
-    } else {
-        var mx = (sx + ex) / 2
-        var y2 = mx + random(0, leaveHeightLength)
-        var y3 = mx - random(0, leaveHeightLength)
-
-        var ly = (sy - ey) / 3
-        if (ly < 0) { ly = -ly }
-        var y2 = sy + ly / 2 + random(0, ly)
-        var y3 = sx + ly + ly / 2 + random(0, ly)
-    }
-
-    var time = [0, random(timeMin, timeMax)]
-    var track = bezierCreate(sx, sy, x2, y2, x3, y3, ex, ey)
-
-    log("控制点A坐标：" + x2 + "," + y2)
-    log("控制点B坐标：" + x3 + "," + y3)
-    log("滑动时长：" + time[1])
-    // log(time.concat(track));
-    gestures(time.concat(track))
-}
-
-function bezierCreate(x1, y1, x2, y2, x3, y3, x4, y4) {
-    var h = 100;
-    var cp = [{ x: x1, y: y1 + h }, { x: x2, y: y2 + h }, { x: x3, y: y3 + h }, { x: x4, y: y4 + h }];
-    var numberOfPoints = 100;
-    var curve = [];
-
-    var dt = 1.0 / (numberOfPoints - 1);
-    for (var i = 0; i < numberOfPoints; i++) {
-        var ax, bx, cx;
-        var ay, by, cy;
-        var tSquared, tCubed;
-        var result_x, result_y;
-
-        cx = 3.0 * (cp[1].x - cp[0].x);
-        bx = 3.0 * (cp[2].x - cp[1].x) - cx;
-        ax = cp[3].x - cp[0].x - cx - bx;
-        cy = 3.0 * (cp[1].y - cp[0].y);
-        by = 3.0 * (cp[2].y - cp[1].y) - cy;
-        ay = cp[3].y - cp[0].y - cy - by;
-
-        var t = dt * i
-        tSquared = t * t;
-        tCubed = tSquared * t;
-        result_x = (ax * tCubed) + (bx * tSquared) + (cx * t) + cp[0].x;
-        result_y = (ay * tCubed) + (by * tSquared) + (cy * t) + cp[0].y;
-        curve[i] = {
-            x: result_x,
-            y: result_y
-        };
-    }
-
-    var array = [];
-    for (var i = 0; i < curve.length; i++) {
-        try {
-            var j = (i < 100) ? i : (199 - i);
-            xx = parseInt(curve[j].x)
-            yy = parseInt(Math.abs(100 - curve[j].y))
-        } catch (e) {
-            break
         }
-        array.push([xx, yy])
+        let popup_parent, popup_child;
+        popup_parent = text(popup_wait_text).findOne().parent();
+        popup_child = popup_parent.findByText(select_text);
+        if (popup_child.size() > 0) {
+            func.cClick(popup_child.get(0));
+        }
+        sleep(200);
+        func.sClick(text(sure_btn).findOne());
     }
-    return array
-}
+
+    function 招商便民生活() {
+        let page_text, wait_text, popup_wait_text, select_text, sure_btn;
+        page_text = "便民生活 遇见美好";
+        wait_text = "选择奖品";
+        popup_wait_text = "请选择奖品";
+        select_text = func.dialogs_select(["双立人", "洁柔", "九阳", "1.8元", "5000微克", "4000微克"]);
+        sure_btn = "确认领取";
+        while (textContains("体验便民频道").findOnce() == null) {
+            toast("请跳转到 生活-便民活动领取页面");
+            sleep(2600);
+        }
+        招商领取(page_text, wait_text, popup_wait_text, select_text, sure_btn);
+    }
+
+    // 到点点击
+    function 光大活动() {
+        toastLog("到点点击");
+        let scheme_url = {
+            "朴朴50-25周六日10点": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126291&channelName=shanquan&batchId=126291&tag=shareDetail",
+            "朴朴50-10平日10点": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126279&jsonData=&channelName=shanquan&batchId=126279&tag=shareDetail",
+            "美团30-15": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126291&jsonData=&channelName=shanquan&batchId=126291&tag=shareDetail",
+            "百果园25买50": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPA&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html",
+
+        }
+        let startTime, targetViewText;
+        let actNames = ["周五石化200-120", "10点美团30-15", "朴朴50-25周六日10点", "朴朴50-10平日10点", "周五百果园25买50", "平日百果园10买20", "叮咚15买20", "肯德基5买10"];
+        let actName = func.dialogs_select(actNames);      // 设置查找的文本
+
+        switch (actName) {
+            // 10点
+            case "10点美团30-15":            //10点
+                startTime = "10,00,00,000";
+                targetViewText = "49346";
+                break;
+            case "朴朴50-25周六日10点":            //10点
+                startTime = "09,59,59,500";
+                targetViewText = "51977";
+                break;
+            case "朴朴50-10平日10点":            //10点
+                startTime = "09,59,59,500";
+                targetViewText = "51971";
+                break;
+            case "周五石化200-120":            //10点
+                // 11点 650 太早 750太慢 700太慢
+                startTime = "14,59,59,500";
+                targetViewText = "49136";
+                break;
+            case "周五京东200-50":            //11点
+                startTime = "14,59,59,500";
+                targetViewText = "48161";
+                break;
+        }
+
+        let appName = "阳光惠生活";
+        let timeArea = "北京时间";
+        if (!!scheme_url[actName]) {
+            func.to_scheme(scheme_url[actName]);
+        } else {
+            func.to_app(appName);
+        }
+        // 等待进入指定页面
+        while (!textContains(targetViewText).findOnce()) {
+            toastLog("请跳转到券领取页面，直到提示  已到达等待页面");
+            sleep(1000);
+        }
+        toastLog("已到达指定页面，等待");
+        let click_btn;
+        click_btn = text("确认购买").findOnce();
+        if (click_btn == null) {
+            click_btn = textContains("立即抢购").findOnce();
+        }
+        //   定位元素
+        func.getTimeDiff(timeArea, startTime,);
+        while (text("收银台").findOnce() == null) {
+            func.sClick(text("确认购买").findOnce());
+            func.sClick(textContains("立即抢购").findOnce());
+            func.sClick(text("确认").findOnce());
+            sleep(23);
+        }
+        toastLog("已点击，请确认结果");
+        sleep(3000);
+    }
+
+    // 等待页面变价
+    function 中信活动() {
+        let appName = "动卡空间";
+        let pkgName = "com.citiccard.harmony.app";
+        let timeArea = "北京时间";
+        let startTime, targetViewText;
+        let actNames = ["10点-15点-9积分兑换", "周三六11点-5折必胜客百果园", "9积分捡漏"];
+        let actName = func.dialogs_select(actNames);      // 设置查找的文本
+        let couDes, couClick;    // 券描述列表
+        let nowDate = new Date();
+        let item_page_text = "价格: 1个权益+9个积分";
+
+        switch (actName) {
+            case "10点-15点-9积分兑换":
+                if (func.dialogs_select(["基础权益", "额外权益"]) == "基础权益") {
+                    couDes = ["京东支付券15元", "天猫15元", "奈雪18元", "百果园18元", "腾讯视频VIP"];
+                }
+                else {
+                    couDes = ["喜茶25", "京东支付券20", "天猫20元", "星巴克中杯", "迪士尼20", "麦当劳25", "美团外卖20", "优酷会员45天", "芒果TV45天"];
+                }
+                toastLog("等待页面变化");
+                // log(nowDate.getHours() <= 9);
+                // 如果当前小时数 大于10，则是15点场
+                if (nowDate.getHours() <= 9) {
+                    startTime = "09,59,50,000"
+                } else {
+                    startTime = "14,59,50,000"
+                    couDes = ["【下午茶】喜茶25元抵用券（15点抢兑）"];
+                }
+
+                if (couDes.length == 1) {
+                    targetViewText = couDes[0];               // 设置查找的文本
+                } else {
+                    targetViewText = func.dialogs_select(couDes);               // 设置查找的文本
+                }
+
+                func.to_app(appName);             // 启动APP
+                couClick = null;          // 找券
+                while (couClick == null) {
+                    if (couDes == "星巴克中杯饮品电子券") {
+                        couClick = text(targetViewText).findOnce();          // 找券
+                    } else {
+                        couClick = textContains(targetViewText).findOnce();          // 找券
+                    }
+                    toastLog("请跳转到券 列表 页面，直到提示  已到达等待页面");
+                    sleep(1000);
+                }
+                // toastLog("已到达等待页面，提前15秒自动进入");
+                toastLog("元素文本：" + couClick.text());
+                func.getTimeDiff(timeArea, startTime);              // 等待到15秒的时候再进入
+                func.sClick(couClick);              // 点击标签
+                text(item_page_text).findOne();             // 等待进入指定页面
+                toastLog("已到达指定页面，等待");
+                //点击元素
+                let un_start, to_pay = null;
+                un_start = text("未开始").findOne();
+                let un_x, un_y;
+                un_x = un_start.bounds().centerX();
+                un_y = un_start.bounds().centerY();
+                while (to_pay == null) {
+                    click(un_x, un_y);
+                    sleep(100);
+                    to_pay = text("去支付").findOnce();
+                }
+                func.sClick(to_pay);
+                toastLog("已点击，等待验证码");
+                sleep(3000);
+                break;
+            case "周三六11点-5折必胜客百果园":
+                toastLog("到点点击");
+                startTime = "11,00,00,000";             // 设置时间点
+                couDes = ["必胜客100元代金券", "必胜客50元代金券", "达美乐50元代金券", "肯德基50元代金券", "乐凯撒50元代金券"];             // 券名称
+                targetViewText = func.dialogs_select(couDes);               // 设置查找的文本
+                func.to_app(appName);             // 启动APP
+                // 等待进入指定页面
+                couClick = text(targetViewText).findOnce();
+                while (couClick == null) {
+                    couClick = text(targetViewText).findOnce();
+                    toastLog("请跳转到，首页-精彩365--5折友券,\n直到提示已到达等待页面");
+                    sleep(2500);
+                }
+                toastLog("元素文本：" + couClick.text());
+                func.getTimeDiff(timeArea, startTime);
+                sleep(200);              // 等待时间
+                func.sClick(couClick);             // 点击元素
+                // 点击元素
+                while (func.sClick(text("确认").findOnce()) == false) {
+                    func.sClick(className("Button").text("立即购买").findOnce());
+                    func.sClick(className("Button").text("已售罄").findOnce());
+                    sleep(100);
+                }
+                // func.sClick(text("确认").findOne());
+                toastLog("已点击，请确认结果");
+                sleep(3000);
+                break;
+            case "9积分捡漏":
+                couDes = ["App Store", "迪士尼25", "必胜客20", "奈雪", "喜茶25元", "苏宁支付券", "京东支付券", "天猫20",
+                    "星巴克中杯饮品电子券", "名创优品20", "网易严选20", "百果园20", "美团外卖20", "优酷VIP", "腾讯视频", "芒果TV", "爱奇艺VIP"];
+                appName = "动卡空间"
+                let cnt = 0;
+                targetViewText = func.dialogs_select(couDes);               // 设置查找的文本
+                func.to_app(appName);             // 启动APP
+                while (text(item_page_text).findOnce() == null) {
+                    sleep(100);
+                    cnt = cnt + 1;
+                    if (cnt >= 25) {
+                        cnt = 0;
+                        toastLog("请手动切换到要捡漏的商品页面");
+                    }
+                }             // 等待进入指定页面
+                sleep(300);
+                nowDate = new Date();
+
+                if (nowDate.getHours() <= 10) {
+                    startTime = "10,18,20,000"
+                } else if (nowDate.getHours() >= 15) {
+                    startTime = "15,18,20,000"
+                } else {
+                    startTime = "00,01,01,100"
+                }
+                toastLog("18分启动.....");
+                func.getTimeDiff(timeArea, startTime);              // 等待时间
+                let exWhile = false;
+                // 门店查找方式
+                if (text("适用门店").findOnce() != null) {
+                    while (1) {
+                        if (func.sClick(text("去兑换").findOnce())) {
+                            func.sClick(text("去支付").findOne());
+                            while (1) {
+                                if (text("适用门店").findOnce() != null) {
+                                    exWhile = false
+                                    break;
+                                }
+                                if (text("交易时间").findOnce() != null) {
+                                    exWhile = true
+                                    break;
+                                }
+                            }
+                            if (exWhile) { break; }
+                        }
+                        if (func.sClick(text("适用门店").findOnce())) {
+                            className("EditText").depth(14).findOne();
+                            back();
+                            sleep(400);
+                        }
+                        sleep(150);
+                    }
+                } else {
+                    let item = null;
+                    // 无门店查找
+                    while (1) {
+                        if (func.sClick(text("去兑换").findOnce())) {
+                            func.sClick(text("去支付").findOne());
+                            while (1) {
+                                if (text("适用门店").findOnce() != null) {
+                                    exWhile = false
+                                    break;
+                                }
+                                if (text("交易时间").findOnce() != null) {
+                                    exWhile = true
+                                    break;
+                                }
+                            }
+                            if (exWhile) { break; }
+                        } else {
+                            back();
+                            item = textContains(targetViewText).depth(17).findOnce();
+                            cnt = 0;
+                            while (item == null) {
+                                item = textContains(targetViewText).depth(17).findOnce();
+                                sleep(50);
+                                scrollDown(0);
+                                cnt = cnt + 1;
+                                // 滑动3次就手动滑动一次
+                                if (cnt >= 3) {
+                                    swipe(500, 850, 500, 600, 100);
+                                    cnt = 0;
+                                }
+                                sleep(50);
+                                func.sClick(text("点击查看更多").findOnce());
+                                sleep(50);
+                            }
+                            func.sClick(item);
+                            text(item_page_text).findOne();
+                        }
+                        sleep(150);
+                    }
+                }
+        }
+    }
+
+    function randomSwipe(sx, sy, ex, ey) {
+        //设置随机滑动时长范围
+        var timeMin = 400
+        var timeMax = 700
+        //设置控制点极限距离
+        var leaveHeightLength = 500
+
+        if (Math.abs(ex - sx) > Math.abs(ey - sy)) {
+            var my = (sy + ey) / 2
+            var y2 = my + random(0, leaveHeightLength)
+            var y3 = my - random(0, leaveHeightLength)
+
+            var lx = (sx - ex) / 3
+            if (lx < 0) { lx = -lx }
+            var x2 = sx + lx / 2 + random(0, lx)
+            var x3 = sx + lx + lx / 2 + random(0, lx)
+        } else {
+            var mx = (sx + ex) / 2
+            var y2 = mx + random(0, leaveHeightLength)
+            var y3 = mx - random(0, leaveHeightLength)
+
+            var ly = (sy - ey) / 3
+            if (ly < 0) { ly = -ly }
+            var y2 = sy + ly / 2 + random(0, ly)
+            var y3 = sx + ly + ly / 2 + random(0, ly)
+        }
+
+        var time = [0, random(timeMin, timeMax)]
+        var track = bezierCreate(sx, sy, x2, y2, x3, y3, ex, ey)
+
+        log("控制点A坐标：" + x2 + "," + y2)
+        log("控制点B坐标：" + x3 + "," + y3)
+        log("滑动时长：" + time[1])
+        // log(time.concat(track));
+        gestures(time.concat(track))
+    }
+
+    function bezierCreate(x1, y1, x2, y2, x3, y3, x4, y4) {
+        var h = 100;
+        var cp = [{ x: x1, y: y1 + h }, { x: x2, y: y2 + h }, { x: x3, y: y3 + h }, { x: x4, y: y4 + h }];
+        var numberOfPoints = 100;
+        var curve = [];
+
+        var dt = 1.0 / (numberOfPoints - 1);
+        for (var i = 0; i < numberOfPoints; i++) {
+            var ax, bx, cx;
+            var ay, by, cy;
+            var tSquared, tCubed;
+            var result_x, result_y;
+
+            cx = 3.0 * (cp[1].x - cp[0].x);
+            bx = 3.0 * (cp[2].x - cp[1].x) - cx;
+            ax = cp[3].x - cp[0].x - cx - bx;
+            cy = 3.0 * (cp[1].y - cp[0].y);
+            by = 3.0 * (cp[2].y - cp[1].y) - cy;
+            ay = cp[3].y - cp[0].y - cy - by;
+
+            var t = dt * i
+            tSquared = t * t;
+            tCubed = tSquared * t;
+            result_x = (ax * tCubed) + (bx * tSquared) + (cx * t) + cp[0].x;
+            result_y = (ay * tCubed) + (by * tSquared) + (cy * t) + cp[0].y;
+            curve[i] = {
+                x: result_x,
+                y: result_y
+            };
+        }
+
+        var array = [];
+        for (var i = 0; i < curve.length; i++) {
+            try {
+                var j = (i < 100) ? i : (199 - i);
+                xx = parseInt(curve[j].x)
+                yy = parseInt(Math.abs(100 - curve[j].y))
+            } catch (e) {
+                break
+            }
+            array.push([xx, yy])
+        }
+        return array
+    }
 
 /*------------------------------------NOT VALID------------------------------------
 function 交行9点5积分() {
