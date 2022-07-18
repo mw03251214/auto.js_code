@@ -7,7 +7,7 @@ main();
 
 function main() {
     device.setMusicVolume(0);       //设为静音
-    let selectedArr = ["光大活动", "中信活动", "京东相关", "BP直达", "招商便民生活", "招商倒计时领取", "刷库存"];
+    let selectedArr = ["光大活动", "中信活动", "京东相关", "BP直达", "招商便民生活", "招商倒计时领取", "刷库存", "金融会员日"];
     //---------------配置区域-----------------
     let scriptName = func.dialogs_select(selectedArr);      // 设置查找的文本        
     // 设置屏幕常亮6分钟
@@ -28,6 +28,8 @@ function main() {
         select_func = func.dialogs_select(Object.keys(刷库存()));
         eval("刷库存()." + select_func + "()");
     }
+    else if (scriptName == "金融会员日") { 金融会员日(); }
+
     // else if (scriptName == "云闪付APPStore") { 云闪付().云闪付APPStore(); }
     // else if (scriptName == "云闪付2022新年捡漏") { 云闪付().云闪付2022新年捡漏(); }
     toastLog("结束");
@@ -47,6 +49,30 @@ function get_server_delay(req_url) {
 
 
 // ------------------------------------------------------
+function 金融会员日() {
+    let h = new Date().getHours();
+    let m = new Date().getMinutes();
+    let h_arr = [10, 20, 30, 40, 50, 60];
+    for (i = 0; i < h_arr.length; i++) {
+        if (m < h_arr[i]) {
+            m = h_arr[i];
+            break;
+        }
+    }
+
+    func.getTimeDiff("北京时间", h + "," + m + ",00,000");
+    let cnt = 0;
+    while (1) {
+        func.sClick(text("是").findOnce());
+        func.sClick(text("立即购买").findOnce());
+        sleep(23);
+        cnt = cnt + 1;
+        if (cnt > 20) {
+            break;
+        }
+    }
+
+}
 function 刷库存() {
     let stock_refresh = {
         饿了么提交订单() {

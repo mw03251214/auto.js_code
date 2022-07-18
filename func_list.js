@@ -554,17 +554,21 @@ function calTimeDiff(area) {
     // 获取时间误差
     switch (area) {
         case "京东时间":
-            timeDiff = Math.max(jdTime(), jdTime(), jdTime());
+            // timeDiff = Math.max(jdTime(), jdTime(), jdTime());
+            timeDiff = jdTime();
             break;
         case "北京时间":
             // timeDiff = Math.trunc((beiJingTime() + beiJingTime()) / 2);
-            timeDiff = Math.max(tbTime(), tbTime(), tbTime());
+            // timeDiff = Math.max(tbTime(), tbTime(), tbTime());
+            timeDiff = tbTime();
             break;
         case "淘宝时间":
-            timeDiff = Math.max(tbTime(), tbTime(), tbTime());
+            // timeDiff = Math.max(tbTime(), tbTime(), tbTime());
+            timeDiff = tbTime();
             break;
         case "苏宁时间":
-            timeDiff = Math.max(snTime(), snTime(), snTime());
+            // timeDiff = Math.max(snTime(), snTime(), snTime());
+            timeDiff = snTime();
             break;
         // default:
         //     timeDiff = Math.trunc((beiJingTime() + beiJingTime()) / 2);

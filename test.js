@@ -8,7 +8,27 @@ var pic_folder = files.cwd() + "/piccs/";
 // // sleep(5000);
 // log(currentPackage())
 // func.to_autojs();
-log(get_server_delay("https://yghsh.cebbank.com/"));
+let h = new Date().getHours();
+let m = new Date().getMinutes();
+let h_arr = [10, 20, 30, 40, 50, 60];
+for (i = 0; i < h_arr.length; i++) {
+    if (m < h_arr[i]) {
+        m = h_arr[i];
+        break;
+    }
+}
+
+func.getTimeDiff("北京时间", h + "," + m + ",00,000");
+let cnt = 0;
+while (1) {
+    func.sClick(text("是").findOnce());
+    func.sClick(text("立即购买").findOnce());
+    sleep(23);
+    cnt = cnt + 1;
+    if (cnt > 20) {
+        break;
+    }
+}
 // log(get_server_delay("http://cube.elemecdn.com"));
 
 
