@@ -8,8 +8,7 @@ var pic_folder = files.cwd() + "/piccs/";
 // // sleep(5000);
 // log(currentPackage())
 // func.to_autojs();
-
-func.sClick(text("瑞幸立减29元").findOnce());
+log(text("温馨提示").findOne())
 
 
 

@@ -7,7 +7,7 @@ main();
 
 function main() {
     device.setMusicVolume(0);       //设为静音
-    let selectedArr = ["光大活动", "中信活动", "京东相关", "BP直达", "招商便民生活", "招商倒计时领取", "刷库存", "金融会员日"];
+    let selectedArr = ["光大活动", "中信活动", "京东相关", "BP直达", "招商便民生活", "招商倒计时领取", "饿了么来伊份", "金融会员日"];
     //---------------配置区域-----------------
     let scriptName = func.dialogs_select(selectedArr);      // 设置查找的文本        
     // 设置屏幕常亮6分钟
@@ -24,9 +24,9 @@ function main() {
     // else if (scriptName == "华彩生活瑞幸") { 华彩生活瑞幸(); }
     else if (scriptName == "招商便民生活") { 招商便民生活(); }
     else if (scriptName == "招商倒计时领取") { 招商倒计时领取(); }
-    else if (scriptName == "刷库存") {
-        select_func = func.dialogs_select(Object.keys(刷库存()));
-        eval("刷库存()." + select_func + "()");
+    else if (scriptName == "饿了么来伊份") {
+        select_func = func.dialogs_select(Object.keys(饿了么来伊份()));
+        eval("饿了么来伊份()." + select_func + "()");
     }
     else if (scriptName == "金融会员日") { 金融会员日(); }
 
@@ -66,19 +66,24 @@ function 金融会员日() {
         target_time = h + "," + m + ",00,000";
     }
     let func_type = func.dialogs_select(["到点点击进入等待", "详情页面领取"]);
-    let text_arr = ["瑞幸立减29元", "188京豆", "18元还款立减", "立减10元", "腾讯视频周卡"];
-
+    let text_arr = ["18元还款立减", "3元支付立减"];
+    let cnt = 15;
     if (func_type == "到点点击进入等待") {
         let select_text = func.dialogs_select(text_arr);
         func.to_app("京东金融");
-        let element = text(select_text).findOne();
         // sleep(5000);
-        func.getTimeDiff("京东时间", target_time, 100);
-        func.sClick(element);
+        func.getTimeDiff("京东时间", target_time, 1000 * 10);
+        func.sClick(text(select_text).findOne());
+        func.getTimeDiff("京东时间", target_time);
+        text("温馨提示").findOne();
+        while (cnt--) {
+            func.sClick(text("是").findOnce());
+            func.sClick(text("立即购买").findOnce());
+            sleep(23);
+        }
     } else {
         func.to_app("京东金融");
         func.getTimeDiff("京东时间", target_time);
-        let cnt = 20;
         while (cnt--) {
             func.sClick(text("是").findOnce());
             func.sClick(text("立即购买").findOnce());
@@ -86,7 +91,7 @@ function 金融会员日() {
         }
     }
 }
-function 刷库存() {
+function 饿了么来伊份() {
     let stock_refresh = {
         饿了么提交订单() {
             let time_area = "北京时间";
@@ -114,48 +119,21 @@ function 刷库存() {
                 func.sClick(text("提交订单").findOnce());
                 func.sClick(text("知道了").findOnce());
                 func.sClick(text("确定").findOnce());
-                sleep(23);
+                sleep(43);
             }
         },
-        饿了么提交订单自动滑块() {
+        饿了么倒计时() {
             let time_area = "北京时间";
-            let h, m, minger;
+            let h, m;
             let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
             log("server_delay:" + server_delay);
             // dat = new Date();
-            minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
+            // minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
             h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
             m = dialogs.rawInput("请输入分钟:");
             let start_time = h + "," + m + ",00,000";
             log("start_time:" + start_time);
-            while (text("提交订单").findOnce() == null) {
-                toast("请手动跳转到 饿了么APP");
-                sleep(2600);
-            }
-            toast("已转到 饿了么APP");
             func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
-            let huakuai, x1, y1, x2, y2, huakuai_bound;
-            // 线程用于处理执行时间
-            threads.start(function () {
-                sleep(minger / 10 * 7.5);
-                exit();
-            });
-            while (1) {
-                func.sClick(text("提交订单").findOnce());
-                func.sClick(text("知道了").findOnce());
-                func.sClick(text("确定").findOnce());
-                huakuai = idContains("nc_1_n1z").findOnce();
-                if (huakuai != null) {
-                    huakuai_bound = huakuai.bounds();
-                    // log(huakuai_bound.left);
-                    x1 = huakuai_bound.centerX();
-                    y1 = huakuai_bound.centerY();
-                    y2 = y1;
-                    x2 = device.width - huakuai_bound.left
-                    randomSwipe(x1, y1, x2, y2);
-                }
-                sleep(23);
-            }
         },
         来伊份刷库存: function () {
             let cnt = 8;
@@ -406,36 +384,19 @@ function 光大活动() {
         "朴朴50-25周六日10点": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126291&channelName=shanquan&batchId=126291&tag=shareDetail",
         "朴朴50-10平日10点": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126279&jsonData=&channelName=shanquan&batchId=126279&tag=shareDetail",
         "美团30-15": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPB&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/126291&jsonData=&channelName=shanquan&batchId=126291&tag=shareDetail",
-        "百果园25买50": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPA&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html",
-
+        "周五百果园25买50": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPA&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/132161&jsonData=&channelName=shanquan&batchId=132161&tag=shareDetail",
+        "平日肯德基5买10": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPA&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/132093&jsonData=&channelName=shanquan&batchId=132093&tag=shareDetail",
+        "平日叮咚15买20": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPA&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/132099&jsonData=&channelName=shanquan&batchId=132099&tag=shareDetail",
+        "平日百果园10买20": "yghsh://jump?channel=FUNGUIDE_VOUCHERS_TEMPA&platform=FUNGUIDE&skipUrl=https://yghsh.cebbank.com/static/coupon/page/VouchersNew/index.html#/couponslist/listdetail/couponsdetail/132157&jsonData=&channelName=shanquan&batchId=132157&tag=shareDetail",
     }
     let startTime, targetViewText;
-    let actNames = ["周五石化200-120", "10点美团30-15", "朴朴50-25周六日10点", "朴朴50-10平日10点", "周五百果园25买50", "平日百果园10买20", "叮咚15买20", "肯德基5买10"];
+    let actNames = ["周五石化200-120", "10点美团30-15", "朴朴50-25周六日10点", "朴朴50-10平日10点", "周五百果园25买50", "平日百果园10买20", "平日叮咚15买20", "平日肯德基5买10"];
     let actName = func.dialogs_select(actNames);      // 设置查找的文本
 
-    switch (actName) {
-        // 10点
-        case "10点美团30-15":            //10点
-            startTime = "10,00,00,000";
-            targetViewText = "49346";
-            break;
-        case "朴朴50-25周六日10点":            //10点
-            startTime = "09,59,59,500";
-            targetViewText = "51977";
-            break;
-        case "朴朴50-10平日10点":            //10点
-            startTime = "09,59,59,500";
-            targetViewText = "51971";
-            break;
-        case "周五石化200-120":            //10点
-            // 11点 650 太早 750太慢 700太慢
-            startTime = "14,59,59,500";
-            targetViewText = "49136";
-            break;
-        case "周五京东200-50":            //11点
-            startTime = "14,59,59,500";
-            targetViewText = "48161";
-            break;
+    if (actName == "10点美团30-15" || actName == "朴朴50-25周六日10点" || actName == "周五百果园25买50" || actName == "平日百果园10买20" || actName == "平日叮咚15买20" || actName == "平日肯德基5买10") {
+        startTime = "10,00,00,000";
+    } else if (actName == "周五石化200-120" || actName == "") {
+        startTime = "14,59,59,500";
     }
 
     let appName = "阳光惠生活";
@@ -446,7 +407,7 @@ function 光大活动() {
         func.to_app(appName);
     }
     // 等待进入指定页面
-    while (!textContains(targetViewText).findOnce()) {
+    while (!textContains("优惠细则").findOnce()) {
         toastLog("请跳转到券领取页面，直到提示  已到达等待页面");
         sleep(1000);
     }
