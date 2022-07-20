@@ -9,8 +9,17 @@ var pic_folder = files.cwd() + "/piccs/";
 // log(currentPackage())
 // func.to_autojs();
 // log(func.cClick(idContains("z3273543").findOnce()));
-func.to_scheme("paesuperbank://?paesuperbank=%7B%22td%22%3A%7B%22id%22%3A%22%E5%94%A4%E9%86%92%E6%B5%AE%E5%B1%82%22%2C%22label%22%3A%22APP%E4%B8%8B%E8%BD%BD%E6%B5%AE%E5%B1%82%E7%AB%8B%E5%8D%B3%E6%89%93%E5%BC%80-%E6%A0%B7%E5%BC%8F2%22%7D%2C%22url%22%3A%22https%3A%2F%2Fb.pingan.com.cn%2Fkuaizhan%2Fpage%2Fcclife%2Flqzx%2F20220512%2Fh66228.html%3Factivity_FlowId%3Dm_A0O8P4cl5jtKSPbu9018%26campaignid%3D202205028912%26ai_id%3Dkuaizhan_h66228%26putInCode%3Dpocket-20170927-035742-380%26isNoInsertCard%3D2%26enUmForShare%3D888888888888%26SSLSOURCE%3DBROP-CMP%26putInCode%3Dpocket-20170927-035742-380%22%2C%22backRule%22%3A%22FLOAT%22%2C%22supId%22%3A%221283%22%7D");
 
+let floatWin = func.floaty_win_init();
+let total_second = 10000 / 10 * 7.5;
+while (total_second > 0) {
+    ui.run(function () {
+        floatWin.text.setText("剩余时间:" + total_second / 1000);
+    });
+    sleep(10);
+    total_second = total_second - 10;
+}
+floatWin.close();
 
 
 // let huakuai = idContains("nc_1_n1z").findOnce();

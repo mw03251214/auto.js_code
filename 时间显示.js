@@ -6,14 +6,15 @@ var selectedArr = [
     "京东时间",
     "苏宁时间",
     "淘宝时间",
-    "延迟测试"
+    "延迟测试",
+    "饿了么倒计时"
 ];
 
 var selectIndex = func.dialogs_select(selectedArr);
 
 if (selectIndex == "延迟测试") {
     var targetAreas, targetUrl;
-    targetAreas = ["北京时间", "京东时间", "苏宁时间", "淘宝时间"];
+    targetAreas = ["北京时间", "京东时间", "苏宁时间", "淘宝时间",];
     // targetArea = func.dialogs_select(targetAreas);
 
     var res, stTimestamp, edTimestamp, resultStr, resultStr2;
@@ -51,6 +52,30 @@ if (selectIndex == "延迟测试") {
     log(resultStr);
     log(resultStr2);
     func.dialogs_alert(resultStr + "\n\n" + resultStr2);
+} else if (selectIndex == "饿了么倒计时") {
+    let time_area = "北京时间";
+    let h, m;
+    let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
+    log("server_delay:" + server_delay);
+    // dat = new Date();
+    let minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
+    h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
+    m = dialogs.rawInput("请输入分钟:");
+    let start_time = h + "," + m + ",00,000";
+    log("start_time:" + start_time);
+    func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
+    sleep(999);
+    let floatWin = func.floaty_win_init();
+    let total_second = minger / 10 * 7.5 - 1000;
+    log("total_second:" + total_second);
+    while (total_second > 0) {
+        ui.run(function () {
+            floatWin.text.setText("剩余时间:" + total_second / 1000);
+        });
+        sleep(10);
+        total_second = total_second - 10;
+    }
+    floatWin.close();
 } else {
     var halfHourFlag = 0;
     var timeDiff = 0;
@@ -125,4 +150,16 @@ if (selectIndex == "延迟测试") {
     //     }
     //     return util.format(selectIndex + ":%d:%s:%s:%s\n", h, m, s, ms);
     // }
+}
+
+
+function get_server_delay(req_url) {
+    try {
+        http.__okhttp__.setTimeout(2000);       // 设置超时2秒
+        http.get(req_url);
+        return http.request_time().requestDelay_dnsStart;
+    } catch (e) {
+        log("get server delay over time");
+        return 40;
+    }
 }

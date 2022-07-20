@@ -29,6 +29,7 @@ function main() {
         eval("饿了么来伊份()." + select_func + "()");
     }
     else if (scriptName == "金融会员日") { 金融会员日(); }
+    else if (scriptName == "平安瑞幸") { 平安瑞幸(); }
 
     // else if (scriptName == "云闪付APPStore") { 云闪付().云闪付APPStore(); }
     // else if (scriptName == "云闪付2022新年捡漏") { 云闪付().云闪付2022新年捡漏(); }
