@@ -7,7 +7,7 @@ main();
 
 function main() {
     device.setMusicVolume(0);       //设为静音
-    let selectedArr = ["光大活动", "中信活动", "京东相关", "BP直达", "招商便民生活", "招商倒计时领取", "饿了么来伊份", "金融会员日"];
+    let selectedArr = ["光大活动", "中信活动", "京东相关", "BP直达", "招商便民生活", "招商倒计时领取", "饿了么来伊份", "平安瑞幸", "金融会员日"];
     //---------------配置区域-----------------
     let scriptName = func.dialogs_select(selectedArr);      // 设置查找的文本        
     // 设置屏幕常亮6分钟
@@ -49,6 +49,20 @@ function get_server_delay(req_url) {
 
 
 // ------------------------------------------------------
+function 平安瑞幸() {
+    let card_type = func.dialogs_select(["信用卡", "借记卡"]);
+    let find_id;
+    if (card_type == "信用卡") { find_id = "z3273543"; }
+    else if (card_type == "借记卡") { find_id = "z3267850" }
+    let target_time = "10,00,00,000";
+    func.to_scheme("paesuperbank://?paesuperbank=%7B%22td%22%3A%7B%22id%22%3A%22%E5%94%A4%E9%86%92%E6%B5%AE%E5%B1%82%22%2C%22label%22%3A%22APP%E4%B8%8B%E8%BD%BD%E6%B5%AE%E5%B1%82%E7%AB%8B%E5%8D%B3%E6%89%93%E5%BC%80-%E6%A0%B7%E5%BC%8F2%22%7D%2C%22url%22%3A%22https%3A%2F%2Fb.pingan.com.cn%2Fkuaizhan%2Fpage%2Fcclife%2Flqzx%2F20220512%2Fh66228.html%3Factivity_FlowId%3Dm_A0O8P4cl5jtKSPbu9018%26campaignid%3D202205028912%26ai_id%3Dkuaizhan_h66228%26putInCode%3Dpocket-20170927-035742-380%26isNoInsertCard%3D2%26enUmForShare%3D888888888888%26SSLSOURCE%3DBROP-CMP%26putInCode%3Dpocket-20170927-035742-380%22%2C%22backRule%22%3A%22FLOAT%22%2C%22supId%22%3A%221283%22%7D");
+    func.getTimeDiff("北京时间", target_time);
+    let cnt = 30;
+    while (cnt--) {
+        func.cClick(idContains(find_id).findOnce());
+        sleep(100);
+    }
+}
 function 金融会员日() {
     let h = new Date().getHours();
     let m = new Date().getMinutes();
