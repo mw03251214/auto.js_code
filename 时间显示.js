@@ -61,13 +61,13 @@ if (selectIndex == "延迟测试") {
     m = dialogs.rawInput("请输入分钟:");
     let start_time = h + "," + m + ",00,000";
     log("start_time:" + start_time);
-    func.getTimeDiff(time_area, start_time, 20000);              // 提前20秒获取延迟参数
+    // func.getTimeDiff(time_area, start_time, 20000);              // 提前20秒获取延迟参数
     let server_delay = get_server_delay("http://cube.elemecdn.com");
     log("server_delay:" + server_delay);
     func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
     sleep(999);
     let floatWin = func.floaty_win_init();
-    let total_second = minger / 10 * 7.5 - 1000;
+    let total_second = minger / 10 * 8 - 1000;
     log("total_second:" + total_second);
     while (total_second > 0) {
         ui.run(function () {

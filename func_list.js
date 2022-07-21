@@ -459,14 +459,14 @@ function floatyInit(window, winView) {
     //     floatyWin.setAdjustEnabled(!floatyWin.isAdjustEnabled());
     // });
     floatyMove(window, winView);
-
-    if (device.brand == "HUAWEI") {
-        //设置浮窗位置
-        window.setPosition(420, 50);
-    } else if (device.brand == "xiaomi") {
-        //设置浮窗位置
-        window.setPosition(520, 50);
-    }
+    window.setPosition(20, 110);
+    // if (device.brand == "HUAWEI") {
+    //     //设置浮窗位置
+    //     window.setPosition(420, 50);
+    // } else if (device.brand == "xiaomi") {
+    //     //设置浮窗位置
+    //     window.setPosition(520, 50);
+    // }
     // 如果需要浮窗一直显示，则可以设置这个
     // setInterval(() => { }, 1000);
     return window;
@@ -510,7 +510,15 @@ function getTimeDiff(area, targetTime, serverDelay) {
     // 生成今天的时间戳
     let targetDelay = serverDelay || 0;
     let targetTimestamp = strTime_to_timestamp(targetTime) - targetDelay;
-
+    // let real_target_time = targetTime;
+    // if (serverDelay > 9000) {
+    //     let new_dt = new Date(targetTimestamp);
+    //     let new_dt_sec = new_dt.getSeconds();
+    //     if (new_dt_sec < 10) {
+    //         new_dt_sec = "0" + new_dt_sec;
+    //     }
+    //     real_target_time = new_dt.getHours() + "," + new_dt.getMinutes() + "," + new_dt.getSeconds();
+    // }
     // 获取当前时间戳
     curTimestamp = new Date().getTime();
 
@@ -525,7 +533,7 @@ function getTimeDiff(area, targetTime, serverDelay) {
     //当剩余时间超过15秒的时候 等待
     while (targetTimestamp - curTimestamp > 15000) {
         curTimestamp = new Date().getTime();
-        setFloatyVal(floatWin, "等待倒计时：" + Math.trunc((targetTimestamp - curTimestamp) / 1000));
+        setFloatyVal(floatWin, "目标:" + targetTime + ",倒计时:" + Math.trunc((targetTimestamp - curTimestamp) / 1000));
         //console.log("等待倒计时：", Math.trunc((targetTimestamp - curTimestamp) / 1000));
         // toastLog("剩余时间:", targetTimestamp - curTimestamp);
         sleep(1000);
@@ -539,7 +547,7 @@ function getTimeDiff(area, targetTime, serverDelay) {
         sleep(10);
         cnt = cnt + 1;
         if (cnt >= 99) {
-            setFloatyVal(floatWin, "等待倒计时：" + Math.trunc((targetTimestamp - curTimestamp) / 1000));
+            setFloatyVal(floatWin, "目标:" + targetTime + ",倒计时:" + Math.trunc((targetTimestamp - curTimestamp) / 1000));
             //console.log("等待倒计时：", Math.trunc((targetTimestamp - curTimestamp) / 1000));
             cnt = 0;
         }

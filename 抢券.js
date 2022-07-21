@@ -122,7 +122,7 @@ function 饿了么来伊份() {
             //     sleep(2600);
             // }
             toast("请手动跳转到 饿了么APP");
-            func.getTimeDiff(time_area, start_time, 20000);              // 提前15秒获取延迟参数
+            // func.getTimeDiff(time_area, start_time, 20000);              // 提前15秒获取延迟参数
             let server_delay = get_server_delay("http://cube.elemecdn.com");
             log("server_delay:" + server_delay);
             func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入

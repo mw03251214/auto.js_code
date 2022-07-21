@@ -10,8 +10,18 @@ var pic_folder = files.cwd() + "/piccs/";
 // func.to_autojs();
 // log(func.cClick(idContains("z3273543").findOnce()));
 
-func.sClick(text("061144ed-d390-4c46-9ea7-21456aa0a5db").findOnce());
+let ts = new Date().getTime();
 
+let dt = new Date(ts);
+log(dt.getHours());
+let sec = dt.getSeconds();
+if (sec < 10) {
+    sec = "0" + sec;
+}
+
+let target_time = "12,20,00,000";
+log(target_time.substring(0, 6));
+log(target_time.substring(8));
 
 // let huakuai = idContains("nc_1_n1z").findOnce();
 // let x1, y1, x2, x3, huakuai_bound;
