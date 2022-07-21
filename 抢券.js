@@ -111,23 +111,34 @@ function 饿了么来伊份() {
         饿了么提交订单() {
             let time_area = "北京时间";
             let h, m, minger;
-            let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
-            log("server_delay:" + server_delay);
             // dat = new Date();
             minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
             h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
             m = dialogs.rawInput("请输入分钟:");
             let start_time = h + "," + m + ",00,000";
             log("start_time:" + start_time);
-            while (text("提交订单").findOnce() == null) {
-                toast("请手动跳转到 饿了么APP");
-                sleep(2600);
-            }
-            toast("已转到 饿了么APP");
+            // while (text("提交订单").findOnce() == null) {
+            //     toast("请手动跳转到 饿了么APP");
+            //     sleep(2600);
+            // }
+            toast("请手动跳转到 饿了么APP");
+            func.getTimeDiff(time_area, start_time, 20000);              // 提前15秒获取延迟参数
+            let server_delay = get_server_delay("http://cube.elemecdn.com");
+            log("server_delay:" + server_delay);
             func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
             // 线程用于处理执行时间
             threads.start(function () {
-                sleep(minger / 10 * 7.5);
+                let floatWin = func.floaty_win_init();
+                let total_second = minger / 10 * 8;
+                log("total_second:" + total_second);
+                while (total_second > 0) {
+                    ui.run(function () {
+                        floatWin.text.setText("剩余时间:" + total_second / 1000);
+                    });
+                    sleep(10);
+                    total_second = total_second - 10;
+                }
+                floatWin.close();
                 exit();
             });
             while (1) {
@@ -136,19 +147,6 @@ function 饿了么来伊份() {
                 func.sClick(text("确定").findOnce());
                 sleep(43);
             }
-        },
-        饿了么倒计时() {
-            let time_area = "北京时间";
-            let h, m;
-            let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
-            log("server_delay:" + server_delay);
-            // dat = new Date();
-            // minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
-            h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
-            m = dialogs.rawInput("请输入分钟:");
-            let start_time = h + "," + m + ",00,000";
-            log("start_time:" + start_time);
-            func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
         },
         来伊份刷库存: function () {
             let cnt = 8;

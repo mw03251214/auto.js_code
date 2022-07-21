@@ -51,13 +51,14 @@ function main() {
 // ======================签到代码==================================
 function 建行生活签到() {
     func.to_app("建行生活");
-    let vipp, vipp_parent;
+    // let vipp, vipp_parent;
     while (!(text("优惠适用商户").findOnce() != null || text("优惠券发放说明").findOnce() != null)) {
-        vipp = text("会员有礼").findOnce();
-        if (vipp != null) {
-            vipp_parent = vipp.parent();
-            func.sClick(vipp_parent.child(vipp.indexInParent() + 1).child(0));
-        }
+        // vipp = text("会员有礼").findOnce();
+        // if (vipp != null) {
+        //     vipp_parent = vipp.parent();
+        //     func.sClick(vipp_parent.child(vipp.indexInParent() + 1).child(0));
+        // }
+        func.sClick(text("061144ed-d390-4c46-9ea7-21456aa0a5db").findOnce());
         toastLog("等待，签到页面，加载");
         sleep(2600);
     }

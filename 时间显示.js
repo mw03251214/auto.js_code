@@ -55,14 +55,15 @@ if (selectIndex == "延迟测试") {
 } else if (selectIndex == "饿了么倒计时") {
     let time_area = "北京时间";
     let h, m;
-    let server_delay = get_server_delay("http://cube.elemecdn.com") - 5;
-    log("server_delay:" + server_delay);
     // dat = new Date();
     let minger = func.dialogs_select([10000, 20000, 30000, 40000, 50000], "选择名额数量");
     h = func.dialogs_select(["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], "选择开始的小时数");
     m = dialogs.rawInput("请输入分钟:");
     let start_time = h + "," + m + ",00,000";
     log("start_time:" + start_time);
+    func.getTimeDiff(time_area, start_time, 20000);              // 提前20秒获取延迟参数
+    let server_delay = get_server_delay("http://cube.elemecdn.com");
+    log("server_delay:" + server_delay);
     func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
     sleep(999);
     let floatWin = func.floaty_win_init();

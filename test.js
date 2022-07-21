@@ -10,16 +10,7 @@ var pic_folder = files.cwd() + "/piccs/";
 // func.to_autojs();
 // log(func.cClick(idContains("z3273543").findOnce()));
 
-let floatWin = func.floaty_win_init();
-let total_second = 10000 / 10 * 7.5;
-while (total_second > 0) {
-    ui.run(function () {
-        floatWin.text.setText("剩余时间:" + total_second / 1000);
-    });
-    sleep(10);
-    total_second = total_second - 10;
-}
-floatWin.close();
+func.sClick(text("061144ed-d390-4c46-9ea7-21456aa0a5db").findOnce());
 
 
 // let huakuai = idContains("nc_1_n1z").findOnce();
