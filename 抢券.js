@@ -109,7 +109,7 @@ function 金融会员日() {
 }
 function 饿了么来伊份() {
     let stock_refresh = {
-        饿了么去结算再提交() {
+        饿了么去结算页面等待() {
             let time_area = "北京时间";
             let h, m, minger;
             // dat = new Date();
@@ -122,7 +122,7 @@ function 饿了么来伊份() {
             //     toast("请手动跳转到 饿了么APP");
             //     sleep(2600);
             // }
-            toast("请手动跳转到 饿了么APP");
+            // toast("请手动跳转到 饿了么APP");
             // func.getTimeDiff(time_area, start_time, 20000);              // 提前15秒获取延迟参数
             let server_delay = get_server_delay("http://cube.elemecdn.com");
             log("server_delay:" + server_delay);
@@ -138,12 +138,12 @@ function 饿了么来伊份() {
                 log("total_second:" + total_second);
                 let cut_timestamp = new Date().getTime();
                 while (cut_timestamp <= total_timestamp) {
-                    cut_timestamp = new Date().getTime();
                     ui.run(function () {
                         floatWin.text.setText("剩余时间:" + total_second / 1000);
                     });
                     sleep(100);
                     total_second = total_second - 101;
+                    cut_timestamp = new Date().getTime();
                 }
                 floatWin.close();
                 log("--------EXIT--------");
@@ -169,7 +169,7 @@ function 饿了么来伊份() {
                 }
             }
         },
-        饿了么先提交再滑块() {
+        饿了么提交订单页面等待() {
             let time_area = "北京时间";
             let h, m, minger;
             // dat = new Date();
@@ -196,12 +196,12 @@ function 饿了么来伊份() {
                 log("total_second:" + total_second);
                 let cut_timestamp = new Date().getTime();
                 while (cut_timestamp <= total_timestamp) {
-                    cut_timestamp = new Date().getTime();
                     ui.run(function () {
                         floatWin.text.setText("剩余时间:" + total_second / 1000);
                     });
                     sleep(100);
                     total_second = total_second - 101;
+                    cut_timestamp = new Date().getTime();
                 }
                 floatWin.close();
                 log("--------EXIT--------");

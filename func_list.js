@@ -212,17 +212,19 @@ function sClick(element) {
                 log("sClick_desc: " + element.desc());
             } else if (element.id() != null && element.id() != "") {
                 log("sClick_id: " + element.id());
-            } else {
-                log("sClick: text/desc/id all empty");
             }
+            // else {
+            //     log("sClick: text/desc/id all empty");
+            // }
         } else {
             click(element.bounds().centerX(), element.bounds().centerY());
             log("sClick: click center x y")
         }
         return true;
-    } else {
-        log("sclick_null")
     }
+    // else {
+    //     log("sclick_null")
+    // }
     return false;
 }
 
