@@ -66,15 +66,19 @@ if (selectIndex == "延迟测试") {
     log("server_delay:" + server_delay);
     func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
     sleep(999);
+
     let floatWin = func.floaty_win_init();
-    let total_second = minger / 10 * 8 - 1000;
+    let total_second = (minger / 10 * 7.5) - 1000;      //扣除上面等待的1s
+    let total_timestamp = func.strTime_to_timestamp(start_time) + total_second;
     log("total_second:" + total_second);
-    while (total_second > 0) {
+    let cut_timestamp = new Date().getTime();
+    while (cut_timestamp <= total_timestamp) {
+        cut_timestamp = new Date().getTime();
         ui.run(function () {
             floatWin.text.setText("剩余时间:" + total_second / 1000);
         });
-        sleep(10);
-        total_second = total_second - 10;
+        total_second = total_second - 101;
+        sleep(100);
     }
     floatWin.close();
 } else {

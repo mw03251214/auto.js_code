@@ -902,6 +902,7 @@ module.exports = {
     // xiaomiUnlock: xiaomiUnlock,
     gesture_pwd: gesture_pwd,
     // widget_wait_load: widget_wait_load,
+    strTime_to_timestamp: strTime_to_timestamp,
     getTimeDiff: getTimeDiff,
     calTimeDiff: calTimeDiff,
     dialogs_alert: dialogs_alert,

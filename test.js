@@ -4,25 +4,27 @@ var func = require("func_list.js");
 var cfg = func.config_dict();
 var pic_folder = files.cwd() + "/piccs/";
 
+
+
+func.sClick(text("去结算").findOne());
+
 // func.to_scheme('openApp.jdMobile://virtual?params={"category":"jump","des":"m","sourceValue":"babel-act","sourceType":"babel","url":"https://pro.m.jd.com/mall/active/3KwXX8TkUoxiYL5ZfDPzs7w7xqEV/index.html?utm_user=plusmember&gx=RnE1l2ANOjXdydTCOBKuwaU&ad_od=share&hideyl=1&cu=true&utm_source=weixin&utm_medium=weixin&utm_campaign=t_1000072672_17053_001&utm_term=500879a71fb64499ba0adf506754815d&PTAG=17053.1.1&_openapp=1"}');
 // // sleep(5000);
 // log(currentPackage())
 // func.to_autojs();
-// log(func.cClick(idContains("z3273543").findOnce()));
-
-let ts = new Date().getTime();
-
-let dt = new Date(ts);
-log(dt.getHours());
-let sec = dt.getSeconds();
-if (sec < 10) {
-    sec = "0" + sec;
-}
-
-let target_time = "12,20,00,000";
-log(target_time.substring(0, 6));
-log(target_time.substring(8));
-
+// // log(func.cClick(idContains("z3273543").findOnce()));
+// let x1, y1, x2, x3, huakuai_bound, huakuai;
+// huakuai = idContains("nc_1_n1z").findOnce();
+// if (huakuai != null) {
+//     huakuai_bound = huakuai.bounds();
+//     // log(huakuai_bound.left);
+//     x1 = huakuai_bound.centerX();
+//     y1 = huakuai_bound.centerY();
+//     y2 = y1;
+//     x2 = device.width - huakuai_bound.left
+//     // gesture(600, [x1, y1], [x2, y2]);
+//     randomSwipe(x1, y1, x2, y2);
+// }
 // let huakuai = idContains("nc_1_n1z").findOnce();
 // let x1, y1, x2, x3, huakuai_bound;
 // huakuai_bound = huakuai.bounds();
@@ -123,16 +125,6 @@ function bezierCreate(x1, y1, x2, y2, x3, y3, x4, y4) {
     return array
 }
 
-function get_server_delay(req_url) {
-    try {
-        http.__okhttp__.setTimeout(2000);       // 设置超时2秒
-        http.get(req_url);
-        return http.request_time().requestDelay_dnsStart;
-    } catch (e) {
-        log("超时了");
-        return 40;
-    }
-}
 
 // func.to_scheme("cmpay:// ?actionId=1515&channelId=k7zaPN2hQcxiPqM2GMzisdkYNH8TB0Gd");
 // auto.setFlags(["findOnUiThread", "useUsageStats"]);
