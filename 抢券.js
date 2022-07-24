@@ -109,7 +109,9 @@ function 金融会员日() {
 }
 function 饿了么来伊份() {
     let stock_refresh = {
-        饿了么去结算页面等待() {
+        饿了么提前15秒触发滑块() {
+            let cnt = 0;
+            let x1, y1, x2, huakuai_bound, huakuai;
             let time_area = "北京时间";
             let h, m, minger;
             // dat = new Date();
@@ -122,14 +124,22 @@ function 饿了么来伊份() {
             //     toast("请手动跳转到 饿了么APP");
             //     sleep(2600);
             // }
-            // toast("请手动跳转到 饿了么APP");
-            // func.getTimeDiff(time_area, start_time, 20000);              // 提前15秒获取延迟参数
+            toast("请手动跳转到 饿了么APP");
+            // 提前15秒 触发滑块
+            func.getTimeDiff(time_area, start_time, 15000);
+            func.sClick(text("提交订单").findOnce());
+            while (idContains("nc_1_n1z").findOnce() == null) {
+                if (cnt == 0 || cnt == 30) {
+                    toast("等待滑块加载");
+                    cnt = 0;
+                }
+                cnt = cnt + 1;
+                sleep(100);
+            }
             let server_delay = get_server_delay("http://cube.elemecdn.com");
             log("server_delay:" + server_delay);
-            toast("等待 饿了么 去结算页面加载");
-            let jiesuan = text("去结算").findOne();
-            func.getTimeDiff(time_area, start_time, server_delay);              // 等待到15秒的时候再进入
-            func.sClick(jiesuan);
+            let huakuai_delay = 350;
+            func.getTimeDiff(time_area, start_time, server_delay + huakuai_delay);              // 等待到15秒的时候再进入
             // 线程用于处理执行时间
             threads.start(function () {
                 let floatWin = func.floaty_win_init();
@@ -149,10 +159,9 @@ function 饿了么来伊份() {
                 log("--------EXIT--------");
                 exit();
             });
-            let x1, y1, x2, huakuai_bound, huakuai;
             while (1) {
                 func.sClick(text("知道了").findOnce());
-                func.sClick(text("确定").findOnce());
+                // func.sClick(text("确定").findOnce());
                 huakuai = idContains("nc_1_n1z").findOnce();
                 if (huakuai != null) {
                     huakuai_bound = huakuai.bounds();
